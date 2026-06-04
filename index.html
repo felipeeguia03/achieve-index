@@ -417,35 +417,67 @@
         background: var(--green);
       }
 
-      /* ===== SECTION: FOTOS ===== */
+      /* ===== TRUST BAR ===== */
+      .trust-bar {
+        background: var(--cream);
+        border-top: 1px solid rgba(92, 107, 58, 0.12);
+        border-bottom: 1px solid rgba(92, 107, 58, 0.12);
+        padding: 18px 24px;
+      }
+      .trust-bar-inner {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+        flex-wrap: wrap;
+      }
+      .trust-item {
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--green);
+        font-weight: 600;
+        padding: 4px 20px;
+      }
+      .trust-sep {
+        color: var(--gold);
+        font-size: 1rem;
+        opacity: 0.7;
+        line-height: 1;
+      }
+      @media (max-width: 480px) {
+        .trust-sep { display: none; }
+        .trust-item { padding: 5px 12px; }
+      }
+
+      /* ===== CAROUSEL ===== */
       .s-fotos {
         background: var(--cream);
-        padding: 0 0 8px;
+        padding: 48px 0 52px;
       }
       .fotos-label {
         max-width: 800px;
-        margin: 0 auto 16px;
+        margin: 0 auto 20px;
         display: block;
         padding: 0 24px;
       }
-      .fotos-strip {
-        display: flex;
-        gap: 4px;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        padding: 0;
+      .carousel {
+        position: relative;
+        max-width: 100%;
+        overflow: hidden;
       }
-      .fotos-strip::-webkit-scrollbar {
-        display: none;
+      .carousel-track {
+        display: flex;
+        transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
       }
       .foto-item {
-        flex: 0 0 calc(20% - 4px);
-        min-width: 160px;
+        flex: 0 0 100%;
         position: relative;
-        aspect-ratio: 3/4;
+        aspect-ratio: 16/9;
         overflow: hidden;
-        scroll-snap-align: start;
       }
       .foto-item img {
         width: 100%;
@@ -458,11 +490,57 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(0, 0, 0, 0.52);
+        background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
         color: white;
-        font-size: 0.62rem;
-        letter-spacing: 0.06em;
-        padding: 6px 10px;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        padding: 28px 20px 14px;
+        text-transform: uppercase;
+      }
+      .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.28);
+        border: none;
+        cursor: pointer;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 2;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .carousel-btn:hover { background: rgba(0,0,0,0.5); }
+      .carousel-btn svg { width: 20px; height: 20px; }
+      .carousel-prev { left: 16px; }
+      .carousel-next { right: 16px; }
+      .carousel-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .carousel-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(92, 107, 58, 0.3);
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition: background 0.25s, transform 0.25s;
+      }
+      .carousel-dot.active {
+        background: var(--gold);
+        transform: scale(1.3);
+      }
+      @media (max-width: 640px) {
+        .carousel-btn { display: none; }
+        .foto-item { aspect-ratio: 4/5; }
       }
 
       /* ===== SECTION: TESTIMONIOS ===== */
@@ -486,6 +564,20 @@
         background: var(--white);
         border-radius: 12px;
         padding: 20px;
+        box-shadow: 0 2px 16px rgba(92, 107, 58, 0.09);
+        position: relative;
+      }
+      .t-card::before {
+        content: '\201C';
+        font-family: var(--serif);
+        font-size: 4.5rem;
+        line-height: 1;
+        color: var(--gold);
+        opacity: 0.22;
+        position: absolute;
+        top: 10px;
+        left: 16px;
+        pointer-events: none;
       }
       .t-head {
         display: flex;
@@ -515,10 +607,12 @@
         color: var(--text-muted);
       }
       .t-text {
-        font-size: 0.86rem;
-        line-height: 1.5;
+        font-size: 0.92rem;
+        line-height: 1.55;
         color: var(--text-dark);
         margin-bottom: 11px;
+        position: relative;
+        z-index: 1;
       }
       .t-likes {
         display: flex;
@@ -724,6 +818,41 @@
         color: rgba(255, 255, 255, 0.3);
       }
 
+      /* ===== FLOATING WA BUTTON ===== */
+      @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .wa-float {
+        position: fixed;
+        bottom: 28px;
+        right: 24px;
+        z-index: 100;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        background: var(--gold);
+        color: var(--white);
+        text-decoration: none;
+        padding: 12px 20px 12px 16px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.88rem;
+        box-shadow: 0 6px 28px rgba(201, 168, 76, 0.45);
+        animation: slideInUp 0.35s ease forwards;
+        transition: background 0.2s, transform 0.15s;
+      }
+      .wa-float:hover { background: #b8943c; transform: translateY(-2px); }
+      .wa-float.visible { display: flex; }
+      .wa-float svg { width: 22px; height: 22px; flex-shrink: 0; }
+      .btn-urgency {
+        display: block;
+        margin-top: 10px;
+        font-size: 0.78rem;
+        color: var(--gold);
+        opacity: 0.85;
+      }
+
       /* ===== RESPONSIVE ===== */
       @media (max-width: 640px) {
         nav.top {
@@ -836,6 +965,17 @@
       </div>
     </section>
 
+    <!-- ========== TRUST BAR ========== -->
+    <div class="trust-bar" aria-hidden="true">
+      <div class="trust-bar-inner">
+        <span class="trust-item">Humano real</span>
+        <span class="trust-sep">·</span>
+        <span class="trust-item">Todos los días</span>
+        <span class="trust-sep">·</span>
+        <span class="trust-item">Sin apps ni plataformas</span>
+      </div>
+    </div>
+
     <!-- ========== CÓMO FUNCIONA ========== -->
     <section class="s-how" aria-labelledby="how-h2">
       <div class="s-header">
@@ -880,31 +1020,44 @@
       </ol>
     </section>
 
-    <!-- ========== FOTOS ========== -->
+    <!-- ========== CAROUSEL ========== -->
     <section class="s-fotos" aria-label="Evidencia diaria">
       <p class="s-label fotos-label">Esto es lo que veo todos los días</p>
-      <div class="fotos-strip">
-        <div class="foto-item">
-          <img src="foto-caminata.jpeg" alt="Cliente caminando" />
-          <span class="foto-tag">Caminata · día 7</span>
+      <div class="carousel" id="photoCarousel">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="foto-item">
+            <img src="foto-caminata.jpeg" alt="Cliente caminando" loading="lazy" />
+            <span class="foto-tag">Caminata · día 7</span>
+          </div>
+          <div class="foto-item">
+            <img src="foto-paseo.jpeg" alt="Paseo nocturno con perro" loading="lazy" />
+            <span class="foto-tag">Paseo · día 12</span>
+          </div>
+          <div class="foto-item">
+            <img src="foto-gym.jpeg" alt="Sesión de gym" loading="lazy" />
+            <span class="foto-tag">Gym · día 5</span>
+          </div>
+          <div class="foto-item">
+            <img src="foto-lectura.jpeg" alt="Lectura diaria" loading="lazy" />
+            <span class="foto-tag">Lectura · día 9</span>
+          </div>
+          <div class="foto-item">
+            <img src="foto-estudio.jpeg" alt="Sesión de estudio" loading="lazy" />
+            <span class="foto-tag">Estudio · día 14</span>
+          </div>
         </div>
-        <div class="foto-item">
-          <img src="foto-paseo.jpeg" alt="Paseo nocturno con perro" />
-          <span class="foto-tag">Paseo · día 12</span>
-        </div>
-        <div class="foto-item">
-          <img src="foto-gym.jpeg" alt="Sesión de gym" />
-          <span class="foto-tag">Gym · día 5</span>
-        </div>
-        <div class="foto-item">
-          <img src="foto-lectura.jpeg" alt="Lectura diaria" />
-          <span class="foto-tag">Lectura · día 9</span>
-        </div>
-        <div class="foto-item">
-          <img src="foto-estudio.jpeg" alt="Sesión de estudio" />
-          <span class="foto-tag">Estudio · día 14</span>
-        </div>
+        <button class="carousel-btn carousel-prev" aria-label="Anterior" id="carouselPrev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <button class="carousel-btn carousel-next" aria-label="Siguiente" id="carouselNext">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
       </div>
+      <div class="carousel-dots" id="carouselDots" aria-hidden="true"></div>
     </section>
 
     <!-- ========== TESTIMONIOS ========== -->
@@ -994,6 +1147,7 @@
           >
             📱 Escribime por WhatsApp
           </a>
+          <span class="btn-urgency">Respondo en menos de 1 hora.</span>
         </div>
         <div class="cta-box">
           <p class="cta-box-lbl">Hablamos</p>
@@ -1154,5 +1308,85 @@
         <p class="ft-copy">Achieve © 2026 — Córdoba, Argentina</p>
       </div>
     </footer>
+    <!-- ========== FLOATING WA ========== -->
+    <a
+      href="https://wa.me/5493513873391?text=Hola%20Felipe%2C%20quiero%20saber%20m%C3%A1s%20sobre%20Achieve"
+      class="wa-float"
+      id="waFloat"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Escribir por WhatsApp"
+    >
+      <svg viewBox="0 0 24 24" fill="white">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.528 5.845L.057 23.428a.5.5 0 00.611.611l5.638-1.478A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.945 9.945 0 01-5.09-1.392l-.364-.217-3.774.989.996-3.69-.235-.38A9.945 9.945 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+      </svg>
+      WhatsApp
+    </a>
+
+    <script>
+      /* ===== CAROUSEL ===== */
+      (function () {
+        const track   = document.getElementById('carouselTrack');
+        const dotsEl  = document.getElementById('carouselDots');
+        const prevBtn = document.getElementById('carouselPrev');
+        const nextBtn = document.getElementById('carouselNext');
+        const slides  = track ? track.querySelectorAll('.foto-item') : [];
+        if (!slides.length) return;
+
+        let current = 0;
+        let timer;
+
+        /* build dots */
+        slides.forEach((_, i) => {
+          const d = document.createElement('button');
+          d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+          d.setAttribute('aria-label', 'Ir a foto ' + (i + 1));
+          d.addEventListener('click', () => goTo(i));
+          dotsEl.appendChild(d);
+        });
+
+        function goTo(idx) {
+          current = (idx + slides.length) % slides.length;
+          track.style.transform = 'translateX(-' + current * 100 + '%)';
+          dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) =>
+            d.classList.toggle('active', i === current)
+          );
+        }
+
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
+
+        function startTimer() { timer = setInterval(next, 4000); }
+        function stopTimer()  { clearInterval(timer); }
+
+        prevBtn && prevBtn.addEventListener('click', () => { stopTimer(); prev(); startTimer(); });
+        nextBtn && nextBtn.addEventListener('click', () => { stopTimer(); next(); startTimer(); });
+
+        const car = document.getElementById('photoCarousel');
+        car.addEventListener('mouseenter', stopTimer);
+        car.addEventListener('mouseleave', startTimer);
+
+        /* touch swipe */
+        let tx0 = 0;
+        car.addEventListener('touchstart', e => { tx0 = e.touches[0].clientX; stopTimer(); }, { passive: true });
+        car.addEventListener('touchend',   e => {
+          const dx = e.changedTouches[0].clientX - tx0;
+          if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
+          startTimer();
+        }, { passive: true });
+
+        startTimer();
+      })();
+
+      /* ===== FLOATING WA BUTTON ===== */
+      (function () {
+        const btn = document.getElementById('waFloat');
+        if (!btn) return;
+        window.addEventListener('scroll', () => {
+          btn.classList.toggle('visible', window.scrollY > 300);
+        }, { passive: true });
+      })();
+    </script>
   </body>
 </html>
